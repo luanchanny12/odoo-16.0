@@ -66,3 +66,7 @@
     .library-banner h1 { font-size: 36px; }
     .library-banner p { font-size: 16px; }
 }
+.o_form_view textarea[name="description"] {
+    padding-left: 4px !important;
+    text-indent: 0 !important;
+}

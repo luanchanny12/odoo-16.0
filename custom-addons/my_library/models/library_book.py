@@ -36,6 +36,7 @@ class LibraryBook(models.Model):
     publication_date = fields.Date(string='Ngày xuất bản')
     isbn = fields.Char(string='Mã ISBN')
     active = fields.Boolean(string='Active', default=True)
+    description = fields.Text(string='Mô tả')
 
     # --- ẢNH BÌA SÁCH ---
     cover_image = fields.Binary(

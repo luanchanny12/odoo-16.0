@@ -50,6 +50,14 @@
                             </group>
                         </group>
 
+                        <!-- ⭐ MÔ TẢ SÁCH ⭐ -->
+                        <group string="Mô tả sách">
+                                <field name="description"
+                                       widget="textarea"
+                                       placeholder="Nhập mô tả về nội dung sách..."
+                                       style="height:250px; width:100%; padding-left:4px !important; text-indent:0 !important;"/>
+                        </group>
+
                         <!-- TAB LỊCH SỬ -->
                         <notebook>
                             <page string="Lịch sử Mượn/Trả">

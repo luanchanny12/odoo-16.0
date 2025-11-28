@@ -54,7 +54,7 @@
 
                                         <!-- Tên sách -->
                                         <h5 class="card-title text-truncate">
-                                            <a t-attf-href="/thu-vien/sach/#{book.id}" style="text-decoration: none;">
+                                            <a t-attf-href="/book/#{book.id}" style="text-decoration: none;">
                                                 <t t-esc="book.name"/>
                                             </a>
                                         </h5>
@@ -70,20 +70,25 @@
                                             <t t-esc="book.category_id.name or 'Chưa phân loại'"/>
                                         </p>
 
-                                        <!-- 3 nút -->
-                                        <a t-attf-href="/thu-vien/sach/#{book.id}"
-                                           class="btn btn-primary book-card-btn">
+                                        <!-- 4 nút -->
+                                        <a t-attf-href="/book/#{book.id}"
+                                           class="btn btn-primary book-card-btn mb-1">
                                             Xem chi tiết
                                         </a>
 
                                         <a t-attf-href="/thu-vien/muon/#{book.id}"
-                                           class="btn btn-success book-card-btn">
+                                           class="btn btn-success book-card-btn mb-1">
                                             Mượn sách
                                         </a>
 
                                         <a t-attf-href="/thu-vien/yeu-thich/#{book.id}"
-                                           class="btn btn-warning book-card-btn">
+                                           class="btn btn-warning book-card-btn mb-1">
                                             ❤️ Yêu thích
+                                        </a>
+
+                                        <a t-attf-href="/thu-vien?category_id=#{book.category_id.id}"
+                                           class="btn btn-info book-card-btn">
+                                            🔗 Sách liên quan
                                         </a>
 
                                     </div>

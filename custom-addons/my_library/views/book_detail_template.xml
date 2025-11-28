@@ -1,39 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="book_detail_template" name="Chi tiết sách">
-        <t t-call="website.layout">
-            <div class="container pt-4">
-                <div class="row">
-                    <!-- Ảnh bìa -->
-                    <div class="col-md-4">
-                        <t t-if="book.cover_image">
-                            <img t-att-src="image_data_uri(book.cover_image)" class="img-fluid" style="border-radius:8px;"/>
-                        </t>
-                        <t t-else="">
-                            <div style="height:250px; display:flex; align-items:center; justify-content:center; background:#f8f9fa;">
-                                <i class="fa fa-book fa-3x text-muted"/>
+    <data>
+        <!-- ... (Template danh sách books_website_template giữ nguyên) ... -->
+
+        <template id="book_detail_template" name="Chi tiết sách">
+            <t t-call="website.layout">
+
+                <!-- CSS tối giản cho phần chọn sao -->
+                <style>
+                    /* Đảo ngược thứ tự flex để khi hover vào sao 4, sao 1-2-3 cũng sáng */
+                    .rating-stars {
+                        display: flex;
+                        flex-direction: row-reverse;
+                        justify-content: flex-end;
+                    }
+                    /* Ẩn nút radio tròn xấu xí */
+                    .rating-stars input {
+                        display: none;
+                    }
+                    /* Hiển thị ngôi sao */
+                    .rating-stars label {
+                        font-size: 2rem;
+                        color: #ddd; /* Màu xám khi chưa chọn */
+                        cursor: pointer;
+                        padding: 0 5px;
+                    }
+                    /* Khi hover hoặc đã chọn (checked) thì đổi màu vàng */
+                    .rating-stars input:checked ~ label,
+                    .rating-stars label:hover,
+                    .rating-stars label:hover ~ label {
+                        color: #ffc107; /* Màu vàng */
+                    }
+                </style>
+
+                <div class="container mt-5 mb-5">
+                    <div class="row">
+                        <!-- CỘT TRÁI: ẢNH BÌA -->
+                        <div class="col-md-4">
+                            <div class="card shadow-sm">
+                                <t t-if="book.cover_image">
+                                    <img t-att-src="image_data_uri(book.cover_image)" class="card-img-top" style="max-height: 500px; object-fit: cover;"/>
+                                </t>
+                                <t t-else="">
+                                    <div class="d-flex align-items-center justify-content-center bg-light" style="height: 400px;">
+                                        <i class="fa fa-book fa-5x text-muted"></i>
+                                    </div>
+                                </t>
                             </div>
-                        </t>
-                    </div>
+                        </div>
 
-                    <!-- Nội dung -->
-                    <div class="col-md-8">
-                        <h1 style="font-weight:700; margin-bottom:10px;"><t t-esc="book.name"/></h1>
-                        <p><strong>Tác giả:</strong> <t t-esc="book.author_id.name"/></p>
-                        <p><strong>Thể loại:</strong> <t t-esc="book.category_id.name or 'Chưa phân loại'"/></p>
-                        <p><strong>Điểm trung bình:</strong> <t t-esc="book.average_rating"/> / 5</p>
-                        <p><strong>Mô tả:</strong></p>
-                        <div><t t-raw="book.description"/></div>
+                        <!-- CỘT PHẢI: THÔNG TIN & ĐÁNH GIÁ -->
+                        <div class="col-md-8">
+                            <!-- Thông tin sách -->
+                            <h1 class="mb-3"><t t-esc="book.name"/></h1>
+                            <p class="text-muted mb-4">
+                                <span class="badge bg-primary mr-2"><i class="fa fa-user"></i> <t t-esc="book.author_id.name"/></span>
+                                <span class="badge bg-info text-white mr-2"><i class="fa fa-tags"></i> <t t-esc="book.category_id.name or 'Chưa phân loại'"/></span>
+                                <span class="badge bg-warning text-dark"><i class="fa fa-star"></i> <t t-esc="book.average_rating"/> / 5</span>
+                            </p>
 
-                        <!-- Nút -->
-                        <div style="margin-top:12px;">
-                            <a t-attf-href="/thu-vien/muon/#{book.id}" style="display:inline-block; padding:6px 12px; background:#1cc88a; color:white; border-radius:6px; text-decoration:none; margin-right:6px;">Mượn sách</a>
-                            <a t-attf-href="/thu-vien/yeu-thich/#{book.id}" style="display:inline-block; padding:6px 12px; background:#f6c23e; color:white; border-radius:6px; text-decoration:none;">❤️ Yêu thích</a>
-                            <a t-attf-href="/" style="display:inline-block; padding:6px 12px; background:#4e73df; color:white; border-radius:6px; text-decoration:none; margin-left:6px;">Quay lại</a>
+                            <div class="mb-4">
+                                <h5>Mô tả:</h5>
+                                <p class="text-justify"><t t-raw="book.description or 'Chưa có mô tả chi tiết.'"/></p>
+                            </div>
+
+                            <!-- Các nút hành động -->
+                            <div class="mb-5">
+                                <a t-attf-href="/thu-vien/muon/#{book.id}" class="btn btn-success btn-lg mr-2">
+                                    <i class="fa fa-shopping-cart"></i> Mượn Sách
+                                </a>
+                                <a t-attf-href="/thu-vien/yeu-thich/#{book.id}" class="btn btn-outline-danger btn-lg mr-2">
+                                    <i class="fa fa-heart"></i> Yêu thích
+                                </a>
+                                <a href="/thu-vien" class="btn btn-secondary btn-lg">
+                                    <i class="fa fa-arrow-left"></i> Quay lại
+                                </a>
+                            </div>
+
+                            <hr/>
+
+                            <!-- FORM GỬI ĐÁNH GIÁ -->
+                            <div class="card bg-light border-0 mt-4">
+                                <div class="card-body">
+                                    <h4 class="card-title mb-3"><i class="fa fa-pencil"></i> Viết đánh giá của bạn</h4>
+
+                                    <!-- Form gửi dữ liệu về Controller -->
+                                    <form action="/thu-vien/danh-gia/gui" method="POST">
+                                        <!-- CSRF Token: Bắt buộc để bảo mật trong Odoo -->
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                        <!-- Gửi kèm ID của sách đang xem -->
+                                        <input type="hidden" name="book_id" t-att-value="book.id"/>
+
+                                        <!-- Chọn số sao -->
+                                        <div class="form-group mb-3">
+                                            <label class="font-weight-bold">Bạn chấm mấy điểm?</label>
+                                            <div class="rating-stars">
+                                                <!-- Thứ tự ngược: 5 -> 1 do dùng flex-direction: row-reverse -->
+                                                <input type="radio" name="rating" id="star5" value="5"/><label for="star5" title="5 sao">★</label>
+                                                <input type="radio" name="rating" id="star4" value="4"/><label for="star4" title="4 sao">★</label>
+                                                <input type="radio" name="rating" id="star3" value="3"/><label for="star3" title="3 sao">★</label>
+                                                <input type="radio" name="rating" id="star2" value="2"/><label for="star2" title="2 sao">★</label>
+                                                <input type="radio" name="rating" id="star1" value="1"/><label for="star1" title="1 sao">★</label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Nhập bình luận -->
+                                        <div class="form-group mb-3">
+                                            <label for="comment" class="font-weight-bold">Nhận xét:</label>
+                                            <textarea class="form-control" name="comment" id="comment" rows="3" placeholder="Hãy chia sẻ cảm nghĩ của bạn về cuốn sách này..." required="True"></textarea>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary">Gửi Đánh Giá</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- Kết thúc Form -->
+
                         </div>
                     </div>
                 </div>
-            </div>
-        </t>
-    </template>
+            </t>
+        </template>
+    </data>
 </odoo>
