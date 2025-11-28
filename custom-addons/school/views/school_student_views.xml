@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="school_student_view_form" model="ir.ui.view">
+            <field name="name">school.student.form</field>
+            <field name="model">school.student</field>
+            <field name="arch" type="xml">
+                <form string="Student">
+                    <sheet>
+                        <field name="image" widget="image" class="oe_avatar"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Student's Name"/>
+                            </h1>
+                            <h3>
+                                <field name="student_code" placeholder="Student ID"/>
+                            </h3>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="birth_date"/>
+                                <field name="age" readonly="1"/>
+                                <field name="gender"/>
+                                <field name="class_id"/>
+                            </group>
+                            <group>
+                                <field name="phone"/>
+                                <field name="email"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Address">
+                                <field name="address"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="school_student_view_tree" model="ir.ui.view">
+            <field name="name">school.student.tree</field>
+            <field name="model">school.student</field>
+            <field name="arch" type="xml">
+                <tree string="Students">
+                    <field name="student_code"/>
+                    <field name="name"/>
+                    <field name="class_id"/>
+                    <field name="age"/>
+                    <field name="gender"/>
+                    <field name="phone"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="school_student_action" model="ir.actions.act_window">
+            <field name="name">Students</field>
+            <field name="res_model">school.student</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new student
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

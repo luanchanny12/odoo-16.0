@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+
+        <!-- TREE VIEW -->
+        <record id="view_tree_library_book" model="ir.ui.view">
+            <field name="name">library.book.tree</field>
+            <field name="model">library.book</field>
+            <field name="arch" type="xml">
+                <tree string="Books">
+                    <field name="cover_image" widget="image" class="oe_avatar"
+                           options="{'size': (64, 64)}"/>
+                    <field name="name"/>
+                    <field name="author_id"/>
+                    <field name="category_id"/>
+                    <field name="publisher_id"/>
+                    <field name="publication_date"/>
+                    <field name="age"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- FORM VIEW -->
+        <record id="view_form_library_book" model="ir.ui.view">
+            <field name="name">library.book.form</field>
+            <field name="model">library.book</field>
+            <field name="arch" type="xml">
+                <form string="Book">
+                    <sheet>
+
+                        <!-- THÔNG TIN SÁCH -->
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="author_id"/>
+                                <field name="category_id"/>
+                                <field name="publisher_id"/>
+                                <field name="isbn"/>
+                                <field name="active"/>
+                            </group>
+
+                            <!-- ẢNH BÌA -->
+                            <group>
+                                <field name="cover_image"
+                                       widget="image"
+                                       class="oe_avatar"
+                                       options="{'size': (350, 350)}"/>
+                                <field name="publication_date"/>
+                                <field name="age"/>
+                            </group>
+                        </group>
+
+                        <!-- TAB LỊCH SỬ -->
+                        <notebook>
+                            <page string="Lịch sử Mượn/Trả">
+                                <field name="borrow_history_ids">
+                                    <tree decoration-info="state == 'borrowed'"
+                                          decoration-muted="state == 'returned'">
+                                        <field name="borrower_id"/>
+                                        <field name="borrower_address"/>
+                                        <field name="borrow_date"/>
+                                        <field name="return_date"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- ACTION -->
+        <record id="action_library_book" model="ir.actions.act_window">
+            <field name="name">Books</field>
+            <field name="res_model">library.book</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Chưa có sách nào được thêm, hãy tạo mới!
+                </p>
+            </field>
+        </record>
+
+        <!-- MENU -->
+        <menuitem
+            id="menu_library_root"
+            name="Thư viện"
+            web_icon="my_library,static/description/icon.png"
+            sequence="10"/>
+
+        <menuitem
+            id="menu_library_book"
+            name="Sách"
+            parent="menu_library_root"
+            action="action_library_book"
+            sequence="10"/>
+
+    </data>
+</odoo>

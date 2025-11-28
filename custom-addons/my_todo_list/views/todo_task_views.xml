@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="view_tree_todo_task" model="ir.ui.view">
+            <field name="name">todo.task.tree</field>
+            <field name="model">todo.task</field>
+            <field name="arch" type="xml">
+                <tree string="Tasks">
+                    <field name="name"/>
+                    <field name="date_start"/>
+                    <field name="date_end"/>
+                    <field name="duration"/>
+                    <field name="is_done"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_form_todo_task" model="ir.ui.view">
+            <field name="name">todo.task.form</field>
+            <field name="model">todo.task</field>
+            <field name="arch" type="xml">
+                <form string="Task">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="date_start"/>
+                                <field name="date_end"/>
+                            </group>
+                            <group>
+                                <field name="duration"/>
+                                <field name="is_done"/>
+                            </group>
+                            <group>
+                                <field name="description"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_todo_task" model="ir.actions.act_window">
+            <field name="name">Công việc</field>
+            <field name="res_model">todo.task</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem
+            id="menu_todo_root"
+            name="Công việc"
+            web_icon="my_todo_list,static/description/icon.png"
+            sequence="20"/>
+        <menuitem
+            id="menu_todo_task"
+            name="Danh sách công việc"
+            parent="menu_todo_root"
+            action="action_todo_task"
+            sequence="10"/>
+    </data>
+</odoo>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- 1. FORM VIEW (Giữ nguyên) -->
+        <record id="view_form_library_borrow" model="ir.ui.view">
+            <field name="name">library.borrow.form</field>
+            <field name="model">library.borrow</field>
+            <field name="arch" type="xml">
+                <form string="Phiếu mượn">
+                    <header>
+                        <button name="action_borrow" string="Xác nhận mượn" type="object"
+                                class="oe_highlight" states="draft"/>
+                        <button name="action_return" string="Xác nhận đã trả" type="object"
+                                class="oe_highlight" states="borrowed"/>
+                        <button name="action_lost" string="Báo mất" type="object"
+                                states="borrowed"/>
+                        <button name="action_reset_to_draft" string="Reset về nháp" type="object"
+                                states="returned,lost"/>
+                        <field name="state" widget="statusbar"
+                                statusbar_visible="draft,borrowed,returned"/>
+                    </header>
+
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="borrower_id"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="borrower_address"/>
+                                <field name="book_id"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            </group>
+                            <group>
+                                <field name="borrow_date"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="return_date"
+                                       attrs="{'readonly': [('state', 'in', ['returned', 'lost'])]}"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- 2. TREE VIEW (Giữ nguyên) -->
+        <record id="view_tree_library_borrow" model="ir.ui.view">
+            <field name="name">library.borrow.tree</field>
+            <field name="model">library.borrow</field>
+            <field name="arch" type="xml">
+                <tree string="Phiếu mượn" decoration-danger="is_overdue == True">
+                    <field name="book_id"/>
+                    <field name="borrower_id"/>
+                    <field name="borrower_address"/>
+                    <field name="borrow_date"/>
+                    <field name="return_date"/>
+                    <field name="state"/>
+                    <field name="is_overdue" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- 3. CALENDAR VIEW (Cập nhật) -->
+        <record id="view_calendar_library_borrow" model="ir.ui.view">
+            <field name="name">library.borrow.calendar</field>
+            <field name="model">library.borrow</field>
+            <field name="arch" type="xml">
+                <!-- SỬA: Đặt string là trường liên quan (book_id) để ép hiển thị tên đẹp -->
+                <calendar string="Lịch Mượn Sách"
+                          date_start="borrow_date"
+                          date_stop="return_date"
+                          color="state"
+                          mode="month"
+                          quick_add="False">
+
+                    <!-- Các trường này sẽ hiển thị trong POP-UP khi bấm vào -->
+                    <field name="book_id"/>
+                    <field name="borrower_id"/>
+                    <field name="borrower_address"/>
+                    <field name="state"/>
+
+                </calendar>
+            </field>
+        </record>
+
+        <!-- 4. ACTION -->
+        <record id="action_library_borrow" model="ir.actions.act_window">
+            <field name="name">Phiếu mượn</field>
+            <field name="res_model">library.borrow</field>
+            <field name="view_mode">tree,form,calendar</field>
+        </record>
+
+        <!-- 5. MENU -->
+        <menuitem
+            id="menu_library_borrow"
+            name="Phiếu mượn"
+            parent="menu_library_root"
+            action="action_library_borrow"
+            sequence="5"/>
+    </data>
+</odoo>

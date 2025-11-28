@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="book_detail_template" name="Chi tiết sách">
+        <t t-call="website.layout">
+            <div class="container pt-4">
+                <div class="row">
+                    <!-- Ảnh bìa -->
+                    <div class="col-md-4">
+                        <t t-if="book.cover_image">
+                            <img t-att-src="image_data_uri(book.cover_image)" class="img-fluid" style="border-radius:8px;"/>
+                        </t>
+                        <t t-else="">
+                            <div style="height:250px; display:flex; align-items:center; justify-content:center; background:#f8f9fa;">
+                                <i class="fa fa-book fa-3x text-muted"/>
+                            </div>
+                        </t>
+                    </div>
+
+                    <!-- Nội dung -->
+                    <div class="col-md-8">
+                        <h1 style="font-weight:700; margin-bottom:10px;"><t t-esc="book.name"/></h1>
+                        <p><strong>Tác giả:</strong> <t t-esc="book.author_id.name"/></p>
+                        <p><strong>Thể loại:</strong> <t t-esc="book.category_id.name or 'Chưa phân loại'"/></p>
+                        <p><strong>Điểm trung bình:</strong> <t t-esc="book.average_rating"/> / 5</p>
+                        <p><strong>Mô tả:</strong></p>
+                        <div><t t-raw="book.description"/></div>
+
+                        <!-- Nút -->
+                        <div style="margin-top:12px;">
+                            <a t-attf-href="/thu-vien/muon/#{book.id}" style="display:inline-block; padding:6px 12px; background:#1cc88a; color:white; border-radius:6px; text-decoration:none; margin-right:6px;">Mượn sách</a>
+                            <a t-attf-href="/thu-vien/yeu-thich/#{book.id}" style="display:inline-block; padding:6px 12px; background:#f6c23e; color:white; border-radius:6px; text-decoration:none;">❤️ Yêu thích</a>
+                            <a t-attf-href="/" style="display:inline-block; padding:6px 12px; background:#4e73df; color:white; border-radius:6px; text-decoration:none; margin-left:6px;">Quay lại</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

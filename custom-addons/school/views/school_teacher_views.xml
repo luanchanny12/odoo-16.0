@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="school_teacher_view_form" model="ir.ui.view">
+            <field name="name">school.teacher.form</field>
+            <field name="model">school.teacher</field>
+            <field name="arch" type="xml">
+                <form string="Teacher">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="teacher_code"/>
+                            </group>
+                            <group>
+                                <field name="phone"/>
+                                <field name="email"/>
+                                <field name="subject"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Homeroom Classes">
+                                <field name="class_ids"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="school_teacher_view_tree" model="ir.ui.view">
+            <field name="name">school.teacher.tree</field>
+            <field name="model">school.teacher</field>
+            <field name="arch" type="xml">
+                <tree string="Teachers">
+                    <field name="teacher_code"/>
+                    <field name="name"/>
+                    <field name="subject"/>
+                    <field name="phone"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="school_teacher_action" model="ir.actions.act_window">
+            <field name="name">Teachers</field>
+            <field name="res_model">school.teacher</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</odoo>

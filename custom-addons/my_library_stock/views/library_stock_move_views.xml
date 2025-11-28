@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_tree_library_stock_move" model="ir.ui.view">
+            <field name="name">library.stock.move.tree</field>
+            <field name="model">library.stock.move</field>
+            <field name="arch" type="xml">
+                <tree string="Di chuyển Kho" decoration-danger="qty &lt; 0" decoration-info="qty &gt; 0">
+                    <field name="date"/>
+                    <field name="name"/>
+                    <field name="book_id"/>
+                    <field name="qty"/>
+                    <field name="state" widget="badge" decoration-success="state == 'done'"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_form_library_stock_move" model="ir.ui.view">
+            <field name="name">library.stock.move.form</field>
+            <field name="model">library.stock.move</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_confirm" string="Xác nhận" type="object"
+                                class="oe_highlight" states="draft"/>
+                        <button name="action_draft" string="Về nháp" type="object"
+                                states="done"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="book_id" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                            </group>
+                            <group>
+                                <field name="date"/>
+                                <field name="qty" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_library_stock_move" model="ir.actions.act_window">
+            <field name="name">Phiếu Nhập/Xuất</field>
+            <field name="res_model">library.stock.move</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_library_stock" name="Kho sách" parent="my_library.menu_library_root" sequence="20"/>
+        <menuitem id="menu_library_stock_move" name="Nhập/Xuất" parent="menu_library_stock" action="action_library_stock_move"/>
+    </data>
+</odoo>

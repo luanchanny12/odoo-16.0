@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_book_form_inherit_stock" model="ir.ui.view">
+            <field name="name">library.book.form.inherit.stock</field>
+            <field name="model">library.book</field>
+            <field name="inherit_id" ref="my_library.view_form_library_book"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//group" position="inside">
+                    <group string="Kho hàng">
+                        <field name="qty_available" readonly="1"/>
+                    </group>
+                </xpath>
+
+                <xpath expr="//notebook" position="inside">
+                    <page string="Lịch sử Kho">
+                        <field name="stock_move_ids" readonly="1">
+                            <tree>
+                                <field name="date"/>
+                                <field name="qty"/>
+                                <field name="state"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_library_return_wizard_form" model="ir.ui.view">
+            <field name="name">library.return.wizard.form</field>
+            <field name="model">library.return.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Trả sách nhanh">
+
+                    <p class="text-muted">
+                        Vui lòng chọn các phiếu mượn cần trả trong danh sách dưới đây:
+                    </p>
+
+                    <field name="borrow_ids">
+                        <tree string="Danh sách sách đang mượn">
+                            <field name="book_id"/>
+                            <field name="borrower_id"/>
+                            <field name="borrow_date"/>
+                            <field name="state" widget="badge" decoration-info="state == 'borrowed'"/>
+                        </tree>
+                    </field>
+
+                    <footer>
+                        <button name="action_return_books" string="Trả sách ngay"
+                                type="object" class="btn-primary"/>
+                        <button string="Hủy bỏ" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_library_return_wizard" model="ir.actions.act_window">
+            <field name="name">Trả sách nhanh</field>
+            <field name="res_model">library.return.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="menu_library_return_wizard"
+                  name="Trả sách nhanh"
+                  parent="my_library.menu_library_root"
+                  action="action_library_return_wizard"
+                  sequence="30"/>
+
+    </data>
+</odoo>

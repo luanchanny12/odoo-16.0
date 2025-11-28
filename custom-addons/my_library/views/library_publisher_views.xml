@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="view_tree_library_publisher" model="ir.ui.view">
+            <field name="name">library.publisher.tree</field>
+            <field name="model">library.publisher</field>
+            <field name="arch" type="xml">
+                <tree string="Publishers">
+                    <field name="name"/>
+                    <field name="website"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_form_library_publisher" model="ir.ui.view">
+            <field name="name">library.publisher.form</field>
+            <field name="model">library.publisher</field>
+            <field name="arch" type="xml">
+                <form string="Publisher">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="website"/>
+                        </group>
+                        <notebook>
+                            <page string="Sách đã sản xuất">
+                                <field name="book_ids">
+                                     <tree>
+                                        <field name="name"/>
+                                        <field name="publication_date"/>
+                                     </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_library_publisher" model="ir.actions.act_window">
+            <field name="name">Punlishers</field>
+            <field name="res_model">library.publisher</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem
+            id="menu_library_publisher"
+            name="Nhà xuất bản"
+            parent="menu_library_root"
+            action="action_library_publisher"
+            sequence="40"/>
+    </data>
+</odoo>

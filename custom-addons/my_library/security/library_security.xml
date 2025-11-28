@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- 1. Tạo danh mục module -->
+        <record model="ir.module.category" id="module_category_library">
+            <field name="name">Quản lý Thư viện</field>
+            <field name="description">Phân quyền truy cập cho ứng dụng Thư viện.</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <!-- 2. Nhóm "Độc giả" (User) -->
+        <record id="group_library_user" model="res.groups">
+            <field name="name">Độc giả</field>
+            <field name="category_id" ref="module_category_library"/>
+            <!-- Kế thừa nhóm Internal User để đăng nhập được -->
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <!-- 3. Nhóm "Thủ thư" (Manager) -->
+        <record id="group_library_manager" model="res.groups">
+            <field name="name">Thủ thư (Quản lý)</field>
+            <field name="category_id" ref="module_category_library"/>
+            <!-- Thủ thư bao gồm tất cả quyền của Độc giả -->
+            <field name="implied_ids" eval="[(4, ref('group_library_user'))]"/>
+            <!-- Thêm admin root vào nhóm này -->
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+    </data>
+</odoo>

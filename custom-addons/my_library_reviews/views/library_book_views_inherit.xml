@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_form_library_book_inherit_rating" model="ir.ui.view">
+            <field name="name">library.book.form.inherit.rating</field>
+            <field name="model">library.book</field>
+
+            <field name="inherit_id" ref="my_library.view_form_library_book"/>
+
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='age']" position="after">
+                    <field name="average_rating" readonly="1"/>
+<!--                    readonly =1 là luôn đúng là luôn luôn bật chế độ chỉ đọc-->
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_form_library_book_inherit_reviews" model="ir.ui.view">
+            <field name="name">library.book.form.inherit.reviews</field>
+            <field name="model">library.book</field>
+
+            <field name="inherit_id" ref="my_library.view_form_library_book"/>
+
+            <field name="arch" type="xml">
+
+                <xpath expr="//notebook" position="inside">
+
+                        <page string="Đánh giá (Reviews)">
+                            <field name="review_ids">
+                                <tree>
+                                    <field name="reviewer_id"/>
+                                    <field name="rating"/>
+                                    <field name="comment"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_form_library_book_review" model="ir.ui.view">
+            <field name="name">library.book.review.form</field>
+            <field name="model">library.book.review</field>
+            <field name="arch" type="xml">
+                <form string="Đánh giá">
+
+
+                    <header>
+                        <button name="action_submit" string="Gửi Đánh giá" type="object"
+                                class="oe_highlight" states="draft"/>
+
+                        <button name="action_approve" string="Duyệt" type="object"
+                                class="oe_highlight" states="submitted"/>
+
+                        <button name="action_reject" string="Từ chối" type="object"
+                                states="submitted"/>
+
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,submitted,approved"/>
+                    </header>
+
+                    <sheet>
+                        <group>
+                            <field name="book_id"
+                                   attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="reviewer_id"
+                                   attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="rating"
+                                   attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </group>
+                        <group>
+                            <field name="comment"
+                                   attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_tree_library_book_review" model="ir.ui.view">
+            <field name="name">library.book.review.tree</field>
+            <field name="model">library.book.review</field>
+            <field name="arch" type="xml">
+                <tree string="Đánh giá sách">
+                    <field name="book_id"/>
+                    <field name="reviewer_id"/>
+                    <field name="rating"/>
+                    <field name="state"/> </tree>
+            </field>
+        </record>
+
+        <record id="action_library_book_review" model="ir.actions.act_window">
+            <field name="name">Đánh giá Sách</field>
+            <field name="res_model">library.book.review</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem
+            id="menu_library_book_review"
+            name="Đánh giá Sách"
+            parent="my_library.menu_library_root"
+            action="action_library_book_review"
+            sequence="100"/>
+
+    </data>
+</odoo>

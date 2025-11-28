@@ -1,0 +1,105 @@
+<odoo>
+    <data>
+        <template id="books_website_template" name="Thư viện Online">
+            <t t-call="website.layout">
+
+                <!-- BANNER -->
+                <div class="container">
+                    <div class="library-banner mt-4">
+                        <h1>📚 Thư viện Online</h1>
+                        <p>Khám phá kho sách miễn phí – Đọc mọi lúc, mọi nơi!</p>
+                    </div>
+                </div>
+
+                <div class="container mt-4 mb-4">
+
+                    <!-- Lọc danh mục -->
+                    <div class="row mb-4">
+                        <div class="col-md-4 offset-md-4">
+                            <select class="form-control" onchange="location = this.value;">
+                                <option value="/thu-vien" t-att-selected="not active_category">
+                                    -- Tất cả thể loại --
+                                </option>
+
+                                <t t-foreach="categories" t-as="cat">
+                                    <option t-att-value="'/thu-vien?category_id=%s' % cat.id"
+                                            t-att-selected="active_category == cat.id">
+                                        <t t-esc="cat.name"/>
+                                    </option>
+                                </t>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Danh sách sách -->
+                    <div class="row">
+                        <t t-foreach="books" t-as="book">
+                            <div class="col-lg-3 col-md-4 col-6 mb-4">
+                                <div class="card h-100 shadow-sm">
+
+                                    <!-- Ảnh -->
+                                    <t t-if="book.cover_image">
+                                        <img t-att-src="image_data_uri(book.cover_image)"
+                                             class="card-img-top"
+                                             style="height: 250px; object-fit: cover;"/>
+                                    </t>
+                                    <t t-else="">
+                                        <div class="d-flex align-items-center justify-content-center bg-light"
+                                             style="height: 250px;">
+                                            <i class="fa fa-book fa-4x text-muted"></i>
+                                        </div>
+                                    </t>
+
+                                    <div class="card-body">
+
+                                        <!-- Tên sách -->
+                                        <h5 class="card-title text-truncate">
+                                            <a t-attf-href="/thu-vien/sach/#{book.id}" style="text-decoration: none;">
+                                                <t t-esc="book.name"/>
+                                            </a>
+                                        </h5>
+
+                                        <!-- Tác giả -->
+                                        <p class="card-text small text-muted mb-1">
+                                            <i class="fa fa-user"></i> <t t-esc="book.author_id.name"/>
+                                        </p>
+
+                                        <!-- Thể loại -->
+                                        <p class="card-text small text-info">
+                                            <i class="fa fa-tags"></i>
+                                            <t t-esc="book.category_id.name or 'Chưa phân loại'"/>
+                                        </p>
+
+                                        <!-- 3 nút -->
+                                        <a t-attf-href="/thu-vien/sach/#{book.id}"
+                                           class="btn btn-primary book-card-btn">
+                                            Xem chi tiết
+                                        </a>
+
+                                        <a t-attf-href="/thu-vien/muon/#{book.id}"
+                                           class="btn btn-success book-card-btn">
+                                            Mượn sách
+                                        </a>
+
+                                        <a t-attf-href="/thu-vien/yeu-thich/#{book.id}"
+                                           class="btn btn-warning book-card-btn">
+                                            ❤️ Yêu thích
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+
+                        <t t-if="not books">
+                            <div class="col-12 text-center">
+                                <p class="text-muted">Không tìm thấy cuốn sách nào.</p>
+                            </div>
+                        </t>
+                    </div>
+
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>
