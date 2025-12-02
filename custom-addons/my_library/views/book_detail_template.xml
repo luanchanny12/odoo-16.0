@@ -1,57 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!-- ... (Template danh sách books_website_template giữ nguyên) ... -->
-
         <template id="book_detail_template" name="Chi tiết sách">
             <t t-call="website.layout">
 
-                <!-- CSS tối giản cho phần chọn sao -->
+                <!-- FLASH MESSAGE -->
+                <t t-if="flash_message">
+                    <div class="container mt-3">
+                        <div class="alert alert-success">
+                            <t t-esc="flash_message"/>
+                        </div>
+                    </div>
+                </t>
+
+                <!-- BANNER -->
+                <section class="s_cover parallax s_parallax_is_fixed bg-black-50 pt96 pb96 o_colored_level" data-scroll-background-ratio="1" data-snippet="s_cover" data-name="Cover" style="background-image: none;">
+                    <span class="s_parallax_bg oe_img_bg" style="background-image: url('/web/image/website.s_cover_default_image'); background-position: 50% 0;"></span>
+                    <div class="o_we_bg_filter bg-black-50"></div>
+                    <div class="container s_allow_columns">
+                        <h1 style="text-align: center;">
+                            <font style="font-size: 62px; font-weight: bold;">📚 Thư viện Online</font><br/>
+                        </h1>
+                        <p class="lead" style="text-align: center;">
+                            Khám phá kho sách miễn phí – Đọc mọi lúc, mọi nơi!
+                        </p>
+                        <p style="text-align: center;">
+                            <a class="btn btn-primary mb-2" href="/contactus">Contact us</a>
+                        </p>
+                    </div>
+                </section>
+
+                <!-- CHI TIẾT SÁCH -->
                 <style>
-                    /* Đảo ngược thứ tự flex để khi hover vào sao 4, sao 1-2-3 cũng sáng */
-                    .rating-stars {
-                        display: flex;
-                        flex-direction: row-reverse;
-                        justify-content: flex-end;
-                    }
-                    /* Ẩn nút radio tròn xấu xí */
-                    .rating-stars input {
-                        display: none;
-                    }
-                    /* Hiển thị ngôi sao */
-                    .rating-stars label {
-                        font-size: 2rem;
-                        color: #ddd; /* Màu xám khi chưa chọn */
-                        cursor: pointer;
-                        padding: 0 5px;
-                    }
-                    /* Khi hover hoặc đã chọn (checked) thì đổi màu vàng */
+                    .rating-stars { display: flex; flex-direction: row-reverse; justify-content: flex-end; }
+                    .rating-stars input { display: none; }
+                    .rating-stars label { font-size: 2rem; color: #ddd; cursor: pointer; padding: 0 5px; }
                     .rating-stars input:checked ~ label,
                     .rating-stars label:hover,
-                    .rating-stars label:hover ~ label {
-                        color: #ffc107; /* Màu vàng */
-                    }
+                    .rating-stars label:hover ~ label { color: #ffc107; }
+
+                    .reviewer { display: flex; align-items: center; margin-bottom: 0.5rem; }
+                    .review-avatar { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; margin-right: 0.5rem; flex-shrink: 0; }
+                    .review-avatar img { width: 100%; height: 100%; object-fit: cover; }
+                    .reviewer-name { font-weight: bold; }
+
+                    .review-item { border: 1px solid #eee; border-radius: 8px; padding: 10px; margin-bottom: 10px; background: #f9f9f9; }
+                    .related-book-card { transition: all 0.3s ease; }
+                    .related-book-card:hover { transform: translateY(-5px); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
                 </style>
 
                 <div class="container mt-5 mb-5">
                     <div class="row">
-                        <!-- CỘT TRÁI: ẢNH BÌA -->
+
+                        <!-- ẢNH BÌA -->
                         <div class="col-md-4">
                             <div class="card shadow-sm">
                                 <t t-if="book.cover_image">
-                                    <img t-att-src="image_data_uri(book.cover_image)" class="card-img-top" style="max-height: 500px; object-fit: cover;"/>
+                                    <img t-att-src="image_data_uri(book.cover_image)" class="card-img-top" style="max-height:500px; object-fit:cover;"/>
                                 </t>
                                 <t t-else="">
-                                    <div class="d-flex align-items-center justify-content-center bg-light" style="height: 400px;">
+                                    <div class="d-flex align-items-center justify-content-center bg-light" style="height:400px;">
                                         <i class="fa fa-book fa-5x text-muted"></i>
                                     </div>
                                 </t>
                             </div>
                         </div>
 
-                        <!-- CỘT PHẢI: THÔNG TIN & ĐÁNH GIÁ -->
+                        <!-- THÔNG TIN SÁCH -->
                         <div class="col-md-8">
-                            <!-- Thông tin sách -->
                             <h1 class="mb-3"><t t-esc="book.name"/></h1>
                             <p class="text-muted mb-4">
                                 <span class="badge bg-primary mr-2"><i class="fa fa-user"></i> <t t-esc="book.author_id.name"/></span>
@@ -64,57 +80,128 @@
                                 <p class="text-justify"><t t-raw="book.description or 'Chưa có mô tả chi tiết.'"/></p>
                             </div>
 
-                            <!-- Các nút hành động -->
+                            <!-- NÚT HÀNH ĐỘNG -->
                             <div class="mb-5">
-                                <a t-attf-href="/thu-vien/muon/#{book.id}" class="btn btn-success btn-lg mr-2">
-                                    <i class="fa fa-shopping-cart"></i> Mượn Sách
-                                </a>
+                                <t t-if="request.env.user.partner_id">
+                                    <a t-attf-href="/thu-vien/muon/#{book.id}" class="btn btn-success btn-lg mr-2 btn-borrow">
+                                        <i class="fa fa-shopping-cart"></i> Mượn Sách
+                                    </a>
+                                </t>
+                                <t t-else="">
+                                    <a t-attf-href="/web/login" class="btn btn-success btn-lg mr-2">
+                                        <i class="fa fa-shopping-cart"></i> Mượn Sách
+                                    </a>
+                                </t>
                                 <a t-attf-href="/thu-vien/yeu-thich/#{book.id}" class="btn btn-outline-danger btn-lg mr-2">
                                     <i class="fa fa-heart"></i> Yêu thích
                                 </a>
-                                <a href="/thu-vien" class="btn btn-secondary btn-lg">
+                                <a href="/" class="btn btn-secondary btn-lg">
                                     <i class="fa fa-arrow-left"></i> Quay lại
                                 </a>
                             </div>
 
                             <hr/>
 
-                            <!-- FORM GỬI ĐÁNH GIÁ -->
+                            <!-- ĐÁNH GIÁ CŨ -->
+                            <div class="mt-4">
+                                <h4 class="mb-3"><i class="fa fa-comments"></i> Đánh giá trước đó</h4>
+                                <t t-foreach="request.env['library.book.review'].sudo().search([('book_id','=',book.id)], order='create_date desc')" t-as="review">
+                                    <div class="review-item">
+                                        <div class="reviewer">
+                                            <div class="review-avatar">
+                                                <t t-if="review.reviewer_id.image_128">
+                                                    <img t-att-src="'/web/image/res.partner/%s/image_128' % review.reviewer_id.id"/>
+                                                </t>
+                                                <t t-else="">
+                                                    <img src="/web/static/img/user_placeholder.jpg"/>
+                                                </t>
+                                            </div>
+                                            <div class="reviewer-name"><t t-esc="review.reviewer_id.name"/></div>
+                                            <div class="review-date ml-auto text-muted" style="font-size:12px;">
+                                                <t t-esc="review.create_date"/>
+                                            </div>
+                                        </div>
+                                        <p class="mb-1">
+                                            <t t-foreach="range(1,6)" t-as="i">
+                                                <i class="fa fa-star" t-att-class="i &lt;= int(review.rating) and 'text-warning' or 'text-muted'"></i>
+                                            </t>
+                                        </p>
+                                        <p class="mb-0"><t t-esc="review.comment"/></p>
+                                    </div>
+                                </t>
+                                <t t-if="not request.env['library.book.review'].sudo().search([('book_id','=',book.id)])">
+                                    <p class="text-muted">Chưa có đánh giá nào.</p>
+                                </t>
+                            </div>
+
+                            <hr/>
+
+                            <!-- FORM ĐÁNH GIÁ -->
                             <div class="card bg-light border-0 mt-4">
                                 <div class="card-body">
                                     <h4 class="card-title mb-3"><i class="fa fa-pencil"></i> Viết đánh giá của bạn</h4>
-
-                                    <!-- Form gửi dữ liệu về Controller -->
                                     <form action="/thu-vien/danh-gia/gui" method="POST">
-                                        <!-- CSRF Token: Bắt buộc để bảo mật trong Odoo -->
                                         <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                                        <!-- Gửi kèm ID của sách đang xem -->
                                         <input type="hidden" name="book_id" t-att-value="book.id"/>
-
-                                        <!-- Chọn số sao -->
                                         <div class="form-group mb-3">
                                             <label class="font-weight-bold">Bạn chấm mấy điểm?</label>
                                             <div class="rating-stars">
-                                                <!-- Thứ tự ngược: 5 -> 1 do dùng flex-direction: row-reverse -->
-                                                <input type="radio" name="rating" id="star5" value="5"/><label for="star5" title="5 sao">★</label>
-                                                <input type="radio" name="rating" id="star4" value="4"/><label for="star4" title="4 sao">★</label>
-                                                <input type="radio" name="rating" id="star3" value="3"/><label for="star3" title="3 sao">★</label>
-                                                <input type="radio" name="rating" id="star2" value="2"/><label for="star2" title="2 sao">★</label>
-                                                <input type="radio" name="rating" id="star1" value="1"/><label for="star1" title="1 sao">★</label>
+                                                <input type="radio" name="rating" id="star5" value="5"/><label for="star5">★</label>
+                                                <input type="radio" name="rating" id="star4" value="4"/><label for="star4">★</label>
+                                                <input type="radio" name="rating" id="star3" value="3"/><label for="star3">★</label>
+                                                <input type="radio" name="rating" id="star2" value="2"/><label for="star2">★</label>
+                                                <input type="radio" name="rating" id="star1" value="1"/><label for="star1">★</label>
                                             </div>
                                         </div>
-
-                                        <!-- Nhập bình luận -->
                                         <div class="form-group mb-3">
                                             <label for="comment" class="font-weight-bold">Nhận xét:</label>
-                                            <textarea class="form-control" name="comment" id="comment" rows="3" placeholder="Hãy chia sẻ cảm nghĩ của bạn về cuốn sách này..." required="True"></textarea>
+                                            <textarea class="form-control" name="comment" id="comment" rows="3" placeholder="Hãy chia sẻ cảm nghĩ của bạn..." required="True"></textarea>
                                         </div>
-
                                         <button type="submit" class="btn btn-primary">Gửi Đánh Giá</button>
                                     </form>
                                 </div>
                             </div>
-                            <!-- Kết thúc Form -->
+
+                            <hr/>
+
+                            <!-- SÁCH LIÊN QUAN -->
+                            <div class="mt-5">
+                                <h4 class="mb-4"><i class="fa fa-book"></i> Sách liên quan</h4>
+                                <div class="row">
+                                    <t t-foreach="request.env['library.book'].sudo().search([('category_id','=',book.category_id.id), ('id','!=',book.id)], limit=4)" t-as="related_book">
+                                        <div class="col-md-3 mb-4">
+                                            <div class="card related-book-card h-100 shadow-sm">
+                                                <t t-if="related_book.cover_image">
+                                                    <img t-att-src="image_data_uri(related_book.cover_image)" class="card-img-top" style="height:180px; object-fit:cover;"/>
+                                                </t>
+                                                <t t-else="">
+                                                    <div class="d-flex align-items-center justify-content-center bg-light" style="height:180px;">
+                                                        <i class="fa fa-book fa-3x text-muted"></i>
+                                                    </div>
+                                                </t>
+                                                <div class="card-body p-2">
+                                                    <h6 class="card-title mb-1">
+                                                        <a t-attf-href="/book/#{related_book.id}" style="text-decoration:none; color:#1cc88a;"><t t-esc="related_book.name"/></a>
+                                                    </h6>
+                                                    <p class="text-muted mb-2" style="font-size:12px;">
+                                                        <i class="fa fa-user"></i> <t t-esc="related_book.author_id.name"/>
+                                                    </p>
+                                                    <div class="d-flex flex-column">
+                                                        <a t-attf-href="/book/#{related_book.id}" class="btn btn-sm btn-primary mb-1 text-center">Xem chi tiết</a>
+                                                        <a t-attf-href="/thu-vien/muon/#{related_book.id}" class="btn btn-sm btn-success mb-1 text-center btn-borrow">Mượn</a>
+                                                        <a t-attf-href="/thu-vien/yeu-thich/#{related_book.id}" class="btn btn-sm btn-warning text-center">❤️ Yêu thích</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </t>
+                                    <t t-if="not request.env['library.book'].sudo().search([('category_id','=',book.category_id.id), ('id','!=',book.id)])">
+                                        <div class="col-12">
+                                            <p class="text-muted">Không tìm thấy sách liên quan.</p>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
 
                         </div>
                     </div>
