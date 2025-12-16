@@ -92,6 +92,7 @@ class LibraryBorrow(models.Model):
         overdue_records = self.search([
             ('state', '=', 'borrowed'),
             ('return_date', '<', today)
+            # nghĩa la ngày trả nhỏ hơn ví dụ 3/12 < 5/12 đúng chưa thì quá hạn trả rồi
         ])
         if overdue_records:
             overdue_records.write({'is_overdue': True})
@@ -101,4 +102,6 @@ class LibraryBorrow(models.Model):
     def _check_return_date(self):
         for borrow in self:
             if borrow.return_date and borrow.return_date < borrow.borrow_date:
+                #cái này nghĩa là phải có ngày trả và ngày trả phải nhỏ hơn ngày mượn thì báo lỗi
+                # cái này để tránh người dùng nhập ngày trả nhỏ hơn ngày mượn
                 raise ValidationError("Ngày trả sách không thể nhỏ hơn ngày mượn sách!")

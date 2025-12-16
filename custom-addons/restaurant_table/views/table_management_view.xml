@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="view_tree_table_management" model="ir.ui.view">
+            <field name="name">table.management.tree</field>
+            <field name="model">table.management</field>
+            <field name="arch" type="xml">
+                <tree string="Detail Tables">
+                    <field name="name"/>
+                    <field name="so_luong"/>
+                    <field name="status"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_form_table_management" model="ir.ui.view">
+            <field name="name">table.management.form</field>
+            <field name="model">table.management</field>
+            <field name="arch" type="xml">
+                <form string="Detail Table">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="so_luong"/>
+                            <field name="status"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_table" model="ir.actions.act.window">
+            <field name="name">Detail Tables</field>
+            <field name="res_model">table.management</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem
+            id="menu_table_root"
+            name="Table Management"
+            sequence="10"/>
+
+        <menuitem
+            id="menu_detail_table"
+            name="Bàn"
+            parent="menu_table_root"
+            action="action_table"
+            sequence="10"/>
+    </data>
+</odoo>
