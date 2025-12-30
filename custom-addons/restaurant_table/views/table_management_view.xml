@@ -29,7 +29,7 @@
             </field>
         </record>
 
-        <record id="action_table" model="ir.actions.act.window">
+        <record id="action_table" model="ir.actions.act_window">
             <field name="name">Detail Tables</field>
             <field name="res_model">table.management</field>
             <field name="view_mode">tree,form</field>

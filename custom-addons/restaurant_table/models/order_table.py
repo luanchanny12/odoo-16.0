@@ -1,32 +1,26 @@
-from email.policy import default
-
 from odoo import api, fields, models
-from datetime import date
 
 class RestaurantTable(models.Model):
-    _name = 'restaurant.table'
+    _name = 'table.management'
     _description = 'Table management'
 
-    active = fields.Boolean(default=True)
-
     name = fields.Char(
-        string=' Số bàn',
+        string='Số bàn',
         required=True,
         copy=False,
-        readonly=True,
-        default='New'
+
     )
 
     so_luong = fields.Integer(
-        string=' Số lượng',
+        string='Số lượng',
         required=True,
     )
 
     status = fields.Selection(
         selection=[
             ('draft', 'Nháp'),
-            ('confirmed', 'đã xác nhận'),
-            ('done', 'xong'),
+            ('confirmed', 'Đã xác nhận'),
+            ('done', 'Xong'),
             ('cancel', 'Hủy'),
         ],
         default='draft',
@@ -34,3 +28,14 @@ class RestaurantTable(models.Model):
         required=True
     )
 
+    @api.model
+    def create(self, vals):
+        # Nếu chưa có name, tự động đặt số bàn tăng dần
+        if not vals.get('name'):
+            # Lấy số bàn lớn nhất hiện có
+            last_table = self.search([], order='name desc', limit=1)
+            if last_table:
+                vals['name'] = str(int(last_table.name) + 1)
+            else:
+                vals['name'] = '1'  # nếu chưa có bàn nào
+        return super(RestaurantTable, self).create(vals)

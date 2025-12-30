@@ -1,4 +1,4 @@
-from odoo.api import depends
+
 
 {
     'name': 'Đặt bàn ăn',
@@ -20,7 +20,7 @@ from odoo.api import depends
     'category': 'Uncategorized',
     'author': 'luanchanny',
     'website': 'https://www.luanchanny.com',
-    'lincese': '',
+    'lincese': 'LGPL-3',
     'description': """
     Đặt chỗ ngồi cho bàn ăn
     """,

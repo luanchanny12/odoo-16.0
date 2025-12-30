@@ -19,7 +19,7 @@
     'category': 'Uncategorized',
     'author': 'luanchanny',
     'website': 'http://www.luanchanny.com',
-    'lincese': 'LPGL-3',
+    'lincese': 'LGPL-3',
     'description': """
     App đặt đồ ăn, đồ uống nhanh
     """,

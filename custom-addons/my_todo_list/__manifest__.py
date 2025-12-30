@@ -6,10 +6,12 @@
     'author': "Nguyễn Thanh Luân",
     'category': 'Uncategorized',
     'version': '1.0',
+    'license': 'LGPL-3',
     'depends': ['base'],
     'data': [
-        'views/todo_task_views.xml',
         'security/ir.model.access.csv',
+        'views/todo_task_views.xml',
     ],
     'application': True,
+    'installable': True,
 }
