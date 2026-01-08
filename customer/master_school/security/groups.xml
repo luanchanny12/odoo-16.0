@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ========================= -->
+    <!-- STUDENT (WEB ONLY) -->
+    <!-- ========================= -->
+    <record id="group_student" model="res.groups">
+        <field name="name">Student</field>
+        <field name="category_id" ref="base.module_category_website"/>
+    </record>
+
+    <!-- ========================= -->
+    <!-- TEACHER (WEB ONLY) -->
+    <!-- ========================= -->
+    <record id="group_teacher" model="res.groups">
+        <field name="name">Teacher</field>
+        <field name="category_id" ref="base.module_category_website"/>
+        <field name="implied_ids" eval="[(4, ref('master_school.group_student'))]"/>
+    </record>
+
+</odoo>

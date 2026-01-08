@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ACTION -->
+    <record id="action_x_student" model="ir.actions.act_window">
+        <field name="name">Sinh viên</field>
+        <field name="res_model">x.student</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- MENU CHA -->
+    <menuitem id="menu_master_school"
+              name="Master School"/>
+
+    <!-- MENU CON -->
+    <menuitem id="menu_x_student"
+          name="Sinh viên"
+          parent="menu_master_school"
+          action="action_x_student"
+          groups="base.group_system"/>
+
+    </data>
+</odoo>
